@@ -18,6 +18,7 @@ tenshi_extensions = [
     'cogs.googleDB'
 ]
 
+# Create new Bot
 class TBR_Tenshi(commands.Bot):
 
     def __init__(self):
@@ -43,12 +44,9 @@ class TBR_Tenshi(commands.Bot):
         finally:
             with open('discord.log', 'w', encoding='utf-8') as fp:
                 for data in self._prev_events:
-                    try:
-                        x = json.dumps(data, ensure_ascii=True, indent=4)
-                    except:
-                        fp.write(f'{data}\n')
-                    else:
-                        fp.write(f'{x}\n')
+                    try: x = json.dumps(data, ensure_ascii=True, indent=4)
+                    except: fp.write(f'{data}\n')
+                    else: fp.write(f'{x}\n')
         
 
 
