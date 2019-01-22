@@ -15,6 +15,7 @@ description = "TBR Tenshi is a bot written by mongoishere for managing the TBR D
 bot_prefix = ("?", "!", "$")
 logging.basicConfig(level=logging.INFO)
 tenshi_extensions = [
+    'cogs.management',
     'cogs.googleDB'
 ]
 
@@ -31,12 +32,14 @@ class TBR_Tenshi(commands.Bot):
 
         self._prev_events = deque(maxlen=10)
         
-        try:
-            for extension in tenshi_extensions:
-                self.load_extension(extension)
-        except Exception as e:
-            print(f'Failed to load extension: {extension}, {str(e)}')
+        for extension in tenshi_extensions:
+            self.load_extension(extension)
+        
 
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        await self.process_commands(message)
 
     def run(self):
         try:

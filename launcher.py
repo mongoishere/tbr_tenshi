@@ -44,10 +44,12 @@ def setup_logging():
             log.removeHandler(handle)
 
 def run_bot():
+
     loop = asyncio.get_event_loop()
     log = logging.getLogger()
     bot = TBR_Tenshi()
     bot.run()
+
 
 @click.group(invoke_without_command=True, options_metavar='[options]')
 @click.pass_context
@@ -71,6 +73,8 @@ try:
     tenshi_token = tenshi_config.get('Globals', 'DiscordToken')
     run(client.login(tenshi_token))
     run(client.connect(reconnect=False))
+
+
 except:
     print('oof')
 
