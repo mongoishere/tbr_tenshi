@@ -3,11 +3,11 @@ import asyncio
 import discord
 import random
 import os
+import sched
+import time
 import requests
 import tempfile
 import configparser
-from io import BytesIO
-from PIL import Image
 from discord.ext import commands
 from threading import Thread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -31,11 +31,18 @@ class GoogleDB(object):
         self.loaded_sheets = {}
         self.tenshi_config = configparser.ConfigParser()
         self.tenshi_config.read('cogs/config.ini')
+        self.cred_updater = sched.scheduler(time.time, time.sleep)
+        self.cred_updater.enter(60, 1, self.authorize, (credentials,))
         # Authorize gspread client with credentials
         self.gsclient = gspread.authorize(credentials)
+        Thread(target = (lambda: self.cred_updater.run())).start()
 
         for x, sheet in enumerate(spreadsheets):
             self.loaded_sheets[f"sh{x}"] = self.gsclient.open(sheet).sheet1
+
+    def authorize(self, credentials):
+        self.gsclient = gspread.authorize(credentials)
+        self.cred_updater.enter(60, 1, self.authorize, (credentials,))
 
     async def findMember(self, member_name, handler):
 

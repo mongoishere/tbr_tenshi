@@ -2,7 +2,6 @@ import sys
 import click
 import logging
 import asyncio
-import asyncpg
 import discord
 import importlib
 import contextlib

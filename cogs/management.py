@@ -22,33 +22,44 @@ class Management(object):
                 self.avail_channels[channel.name] = channel.id
         #import pdb; pdb.set_trace()
 
+    async def on_member_join(self, member):
+        server = member.server
+        default_channel = server.default_channel
+        default_role = discord.utils.get(member.server.roles, name='New Blood')
+        message = f"Hello {member.mention} welcome to {server.name}!"
+        
+        await client.add_roles(member, default_role)
+        return await client.send_message(default_channel, message)
+    
     async def on_message(self, message):
         print(message.author)
 
-    async def on_member_update(self, before, after):
-        greet_trigger = bool(random.getrandbits(1))
-        if(greet_trigger):
-            #import pdb; pdb.set_trace()
-            mention = after.mention
-            greetings = [
-                f"{mention} Hallo there :heart:",
-                f"{mention} Welcome back UwU",
-                f"{mention} Oh, hey there!",
-                f"Hey {mention} is here!",
-                f"{mention} Home sweet home"
-            ]
-
-            print(before.name)
-            if str(before.status) == "offline":
-                if str(after.status) == "online":
-                    target_channel = self.bot.get_channel(self.avail_channels['general'])
-                    await self.bot.send_message(target_channel, greetings[random.randint(0, len(greetings)-1)])
-
     @commands.command(pass_context=True)
     async def channelTest(self, ctx):
-        import pdb; pdb.set_trace()
-        channel = discord.utils.get(ctx.messaserver.channels, name='Foo', type=ChannelType.voice)
         
+        default_role = discord.utils.get(ctx.message.author.server.roles, name='New Blood')
+        import pdb; pdb.set_trace()
+
+    @commands.command(pass_context=True)
+    async def help(self, ctx):
+        author = ctx.message.author
+        channel = ctx.message.channel
+
+        help_dict = {
+            "memberinfo": (
+                "Returns general member information the supplied gamertag\n"
+                "`$messageinfo <member_gamertag>`"
+            )
+        }
+
+        embed = discord.Embed(
+            colour = discord.Colour.orange()
+        )
+        embed.set_author(name='Help')
+        
+        embed.add_field(name='$memberinfo', value=help_dict['memberinfo'], inline=False)
+
+        await self.bot.send_message(channel, embed=embed)
 
     @commands.command(pass_context=True)
     async def send_message(self, ctx, channel_id, *args):

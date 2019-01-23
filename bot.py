@@ -30,6 +30,7 @@ class TBR_Tenshi(commands.Bot):
         self.tenshi_config.read('cogs/config.ini')
         self.tenshi_token = self.tenshi_config.get('Globals', 'DiscordToken')
 
+        self.remove_command('help')
         self._prev_events = deque(maxlen=10)
         
         for extension in tenshi_extensions:
