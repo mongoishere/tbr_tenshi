@@ -49,6 +49,11 @@ class Management(object):
             "memberinfo": (
                 "Returns general member information the supplied gamertag\n"
                 "`$messageinfo <member_gamertag>`"
+            ),
+            "claninfo": (
+                "Returns clans based on the arguements provided\n"
+                "`claninfo` <option> <argument>\n"
+                ""
             )
         }
 
