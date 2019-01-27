@@ -41,6 +41,8 @@ class GoogleDB(object):
             self.loaded_sheets[f"sh{x}"] = self.gsclient.open(sheet).sheet1
 
     def authorize(self, credentials):
+        try: self.gsclient.login(); print('Reauthorized')
+        except Exception as e: print(str(e))
         credentials = ServiceAccountCredentials.from_json_keyfile_name('cogs/Tenshi-fcd293624b99.json', scope)
         self.gsclient = gspread.authorize(credentials)
         self.cred_updater.enter(60, 1, self.authorize, (credentials,))
